@@ -1,7 +1,7 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 
+// Arahkan halaman root utama sementara ke endpoint orders
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/orders');
 });
