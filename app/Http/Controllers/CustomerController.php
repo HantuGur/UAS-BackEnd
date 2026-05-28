@@ -1,39 +1,40 @@
 <?php
 namespace App\Http\Controllers;
-use App\Http\Requests\StoreCustomerRequest;
-use App\Models\Customer;
+use App\Http\Requests\StoreMenuRequest;
+use App\Models\Menu;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class CustomerController extends Controller {
+class MenuController extends Controller {
     public function index(): View {
-        $customers = Customer::all();
-        return view('customers.index', compact('customers'));
+        $menus = Menu::all();
+        return view('menus.index', compact('menus'));
     }
     public function create(): View {
-        return view('customers.create');
+        return view('menus.create');
     }
-    public function store(StoreCustomerRequest $request): RedirectResponse {
-        Customer::create($request->validated());
-        return redirect()->route('customers.index')->with('success', 'Data pelanggan berhasil ditambahkan.');
+    public function store(StoreMenuRequest $request): RedirectResponse {
+        Menu::create($request->validated());
+        return redirect()->route('menus.index')->with('success', 'Menu berhasil ditambahkan.');
     }
-    public function show(Customer $customer): View {
-        return view('customers.show', compact('customer'));
+    public function show(Menu $menu): View {
+        return view('menus.show', compact('menu'));
     }
-    public function edit(Customer $customer): View {
-        return view('customers.edit', compact('customer'));
+    public function edit(Menu $menu): View {
+        return view('menus.edit', compact('menu'));
     }
-    public function update(Request $request, Customer $customer): RedirectResponse {
+    public function update(Request $request, Menu $menu): RedirectResponse {
         $validated = $request->validate([
-            'name'  => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
+            'name'     => 'required|string|max:255',
+            'price'    => 'required|integer|min:0',
+            'category' => 'required|string|max:100',
         ]);
-        $customer->update($validated);
-        return redirect()->route('customers.index')->with('success', 'Data pelanggan berhasil diperbarui.');
+        $menu->update($validated);
+        return redirect()->route('menus.index')->with('success', 'Menu berhasil diperbarui.');
     }
-    public function destroy(Customer $customer): RedirectResponse {
-        $customer->delete();
-        return redirect()->route('customers.index')->with('success', 'Data pelanggan berhasil dihapus.');
+    public function destroy(Menu $menu): RedirectResponse {
+        $menu->delete();
+        return redirect()->route('menus.index')->with('success', 'Menu berhasil dihapus.');
     }
 }
