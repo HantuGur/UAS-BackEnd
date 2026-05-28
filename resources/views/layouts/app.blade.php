@@ -86,11 +86,10 @@
     <div class="sidebar">
         <div class="logo"> <span>RestoUAS</span></div>
         <ul class="nav-links">
-            <li><a href="/orders"> Pesanan (Orders)</a></li>
-            <li><a href="/customers"> Pelanggan</a></li>
-            <li><a href="/menus"> Menu Makanan</a></li>
+            <li><a href="{{ route('orders.index') }}" class="{{ Request::is('orders*') ? 'active' : '' }}"> Pesanan (Orders)</a></li>
+            <li><a href="{{ route('customers.index') }}" class="{{ Request::is('customers*') ? 'active' : '' }}"> Pelanggan</a></li>
+            <li><a href="{{ route('menus.index') }}" class="{{ Request::is('menus*') ? 'active' : '' }}"> Menu Makanan</a></li>
         </ul>
-    </div>
     <div class="main-content">
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
