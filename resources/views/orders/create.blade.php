@@ -47,7 +47,7 @@
                         <label>Jumlah</label>
                         <input type="number" name="items[0][quantity]" class="form-control" min="1" value="1" required>
                     </div>
-                    <button type="button" class="btn btn-danger btn-remove" style="padding:12px 16px;display:none"></button>
+                    <button type="button" class="btn btn-danger btn-remove" style="padding:12px 16px;display:none">&times;</button>
                 </div>
             </div>
             <div style="margin-top:20px;display:flex;justify-content:space-between;align-items:center">
