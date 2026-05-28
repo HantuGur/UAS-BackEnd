@@ -90,6 +90,7 @@
             <li><a href="{{ route('customers.index') }}" class="{{ Request::is('customers*') ? 'active' : '' }}"> Pelanggan</a></li>
             <li><a href="{{ route('menus.index') }}" class="{{ Request::is('menus*') ? 'active' : '' }}"> Menu Makanan</a></li>
         </ul>
+    </div>
     <div class="main-content">
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>

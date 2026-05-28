@@ -1,4 +1,4 @@
-extends('layouts.app')
+@extends('layouts.app')
 @section('title', 'Daftar Pesanan - RestoUAS')
 @section('content')
 <div class="header">
