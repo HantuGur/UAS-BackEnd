@@ -9,9 +9,10 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
             $table->foreignId('menu_id')->constrained('menus')->onDelete('cascade');
-            $table->string('name'); // snapshot nama menu
-            $table->integer('price'); // snapshot harga menu
+            $table->string('name');
+            $table->integer('price');
             $table->integer('quantity');
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }
