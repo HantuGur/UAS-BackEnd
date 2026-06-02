@@ -9,7 +9,11 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
             $table->integer('total_price')->default(0);
+            $table->integer('discount_amount')->default(0);
+            $table->unsignedBigInteger('promo_id')->nullable();
             $table->string('status')->default('pending');
+            $table->string('order_type')->default('dine_in');
+            $table->unsignedBigInteger('table_id')->nullable();
             $table->timestamps();
         });
     }
