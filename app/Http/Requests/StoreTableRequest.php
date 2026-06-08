@@ -7,9 +7,9 @@ class StoreTableRequest extends FormRequest
     public function authorize(): bool { return true; }
     public function rules(): array {
         return [
-            'table_number' => 'required|string|max:50',
-            'capacity' => 'required|integer|min:1',
-            'status' => 'required|string|in:available,occupied'
+            'table_number' => 'required|integer|unique:tables,table_number',
+            'capacity'     => 'required|integer|min:1',
+            'status'       => 'required|in:available,occupied',
         ];
     }
 }
