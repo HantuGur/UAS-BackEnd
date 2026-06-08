@@ -7,12 +7,11 @@ class StoreEmployeeRequest extends FormRequest
     public function authorize(): bool { return true; }
     public function rules(): array {
         return [
-            'name' => 'required|string|max:255',
-            'role' => 'required|string|max:100',
-            'phone' => 'nullable|string|max:20',
-            'username' => 'nullable|string|max:255|unique:employees,username,' . ($this->employee ? $this->employee->id : 'NULL'),
-            'password' => 'nullable|string|min:6',
-            'branch_id' => 'nullable|integer'
+            'branch_id' => 'required|exists:branches,id',
+            'name'      => 'required|string|max:255',
+            'username'  => 'required|string|max:100|unique:employees,username',
+            'password'  => 'required|string|min:6',
+            'role'      => 'required|in:admin,kasir,manager',
         ];
     }
 }
