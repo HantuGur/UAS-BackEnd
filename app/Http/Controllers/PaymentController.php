@@ -22,6 +22,9 @@ class PaymentController extends Controller
     }
     public function store(StorePaymentRequest $request) {
         $order = Order::findOrFail($request->order_id);
+        if ($order->status === 'completed') {
+            return back()->withErrors(['order_id' => 'Pesanan ini sudah selesai dibayar.'])->withInput();
+        }
         $amount = $request->amount;
 
         if ($request->promo_id) {
