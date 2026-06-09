@@ -23,4 +23,11 @@ class PromoController extends Controller
         $promo->delete();
         return redirect()->route('promos.index')->with('success', 'Promo berhasil dihapus.');
     }
+    public function publicIndex() {
+        $promos = Promo::where('status', 'active')
+            ->where('is_public', true)
+            ->where('expired_at', '>=', date('Y-m-d'))
+            ->get();
+        return response()->json($promos);
+    }
 }
