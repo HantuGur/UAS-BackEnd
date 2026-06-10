@@ -1,37 +1,62 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Models\Reservation;
 use App\Models\Customer;
 use App\Models\Table;
 use App\Http\Requests\StoreReservationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReservationController extends Controller
 {
-    public function index() {
-        $reservations = Reservation::with(['customer', 'table'])->latest()->get();
+    public function index()
+    {
+        $reservations = Reservation::with(['customer', 'table'])
+            ->latest()
+            ->get()
+            ->groupBy('status');
+
         return view('reservations.index', compact('reservations'));
     }
-    public function create() {
+
+    public function create()
+    {
         $customers = Customer::all();
         $tables = Table::where('status', 'available')->get();
+
         return view('reservations.create', compact('customers', 'tables'));
     }
-    public function store(StoreReservationRequest $request) {
-        \Illuminate\Support\Facades\DB::transaction(function () use ($request) {
+
+    public function store(StoreReservationRequest $request)
+    {
+        DB::transaction(function () use ($request) {
             $data = $request->validated();
             $data['status'] = 'approved';
+
             Reservation::create($data);
-            Table::find($request->table_id)?->update(['status' => 'occupied']);
+
+            Table::find($request->table_id)?->update([
+                'status' => 'occupied'
+            ]);
         });
-        return redirect()->route('reservations.index')->with('success', 'Reservasi berhasil dibuat dan langsung disetujui.');
+
+        return redirect()
+            ->route('reservations.index')
+            ->with('success', 'Reservasi berhasil dibuat dan langsung disetujui.');
     }
-    public function edit(Reservation $reservation) {
+
+    public function edit(Reservation $reservation)
+    {
         $customers = Customer::all();
         $tables = Table::all();
+
         return view('reservations.edit', compact('reservation', 'customers', 'tables'));
     }
-    public function update(Request $request, Reservation $reservation) {
+
+    public function update(Request $request, Reservation $reservation)
+    {
         $validated = $request->validate([
             'customer_id'      => 'required|exists:customers,id',
             'table_id'         => 'required|exists:tables,id',
@@ -39,28 +64,49 @@ class ReservationController extends Controller
             'guests_count'     => 'required|integer|min:1',
             'status'           => 'required|string|in:approved,cancelled',
         ]);
-        \Illuminate\Support\Facades\DB::transaction(function () use ($validated, $reservation) {
+
+        DB::transaction(function () use ($validated, $reservation) {
             $oldTableId = $reservation->table_id;
             $oldStatus  = $reservation->status;
+
             $reservation->update($validated);
+
             if ($oldStatus === 'approved') {
-                Table::find($oldTableId)?->update(['status' => 'available']);
+                Table::find($oldTableId)?->update([
+                    'status' => 'available'
+                ]);
             }
+
             if ($validated['status'] === 'approved') {
-                Table::find($validated['table_id'])?->update(['status' => 'occupied']);
+                Table::find($validated['table_id'])?->update([
+                    'status' => 'occupied'
+                ]);
             } else {
-                Table::find($validated['table_id'])?->update(['status' => 'available']);
+                Table::find($validated['table_id'])?->update([
+                    'status' => 'available'
+                ]);
             }
         });
-        return redirect()->route('reservations.index')->with('success', 'Reservasi berhasil diperbarui.');
+
+        return redirect()
+            ->route('reservations.index')
+            ->with('success', 'Reservasi berhasil diperbarui.');
     }
-    public function destroy(Reservation $reservation) {
-        \Illuminate\Support\Facades\DB::transaction(function () use ($reservation) {
+
+    public function destroy(Reservation $reservation)
+    {
+        DB::transaction(function () use ($reservation) {
             if ($reservation->status === 'approved') {
-                Table::find($reservation->table_id)?->update(['status' => 'available']);
+                Table::find($reservation->table_id)?->update([
+                    'status' => 'available'
+                ]);
             }
+
             $reservation->delete();
         });
-        return redirect()->route('reservations.index')->with('success', 'Reservasi berhasil dihapus.');
+
+        return redirect()
+            ->route('reservations.index')
+            ->with('success', 'Reservasi berhasil dihapus.');
     }
 }
