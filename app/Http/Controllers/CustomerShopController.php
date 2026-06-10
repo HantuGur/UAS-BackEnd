@@ -131,4 +131,40 @@ class CustomerShopController extends Controller
         });
         return redirect()->route('customer.orders')->with('success', 'Pembayaran QRIS berhasil! Pesanan Anda sedang diproses.');
     }
+
+    public function myOrders() {
+        if (!session()->has('customer_id')) return redirect()->route('customer.login');
+        $orders = Order::with(['items', 'customer'])->where('customer_id', session('customer_id'))->latest()->get();
+        return view('customer.orders', compact('orders'));
+    }
+    public function addReview($menu_id) {
+        $menu = Menu::findOrFail($menu_id);
+        return view('customer.reviews', compact('menu'));
+    }
+    public function storeReview(Request $request) {
+        $request->validate(['menu_id' => 'required|exists:menus,id', 'rating' => 'required|integer|min:1|max:5', 'comment' => 'nullable|string']);
+        Review::create(['customer_id' => session('customer_id'), 'menu_id' => $request->menu_id, 'rating' => $request->rating, 'comment' => $request->comment]);
+        return redirect()->route('customer.orders')->with('success', 'Terima kasih atas ulasan Anda!');
+    }
+    public function addFeedback() {
+        $cartCount = 0;
+        if (session()->has('customer_id')) $cartCount = Cart::where('customer_id', session('customer_id'))->sum('quantity');
+        return view('customer.feedback', compact('cartCount'));
+    }
+    public function storeFeedback(Request $request) {
+        $request->validate(['subject' => 'required|string|max:255', 'message' => 'required|string']);
+        \App\Models\Feedback::create(['customer_id' => session('customer_id'), 'subject' => $request->subject, 'message' => $request->message]);
+        return redirect()->route('customer.feedback')->with('success', 'Aduan Anda berhasil dikirim dan akan segera diproses.');
+    }
+    public function validatePromo(Request $request) {
+        $request->validate(['code' => 'required|string']);
+        $promo = Promo::where('code', strtoupper($request->code))->where('status', 'active')->where('expired_at', '>=', date('Y-m-d'))->first();
+        if (!$promo) {
+            return response()->json(['success' => false, 'message' => 'Kode voucher tidak valid atau sudah kadaluarsa.']);
+        }
+        return response()->json([
+            'success' => true,
+            'promo'   => ['id' => $promo->id, 'code' => $promo->code, 'discount_type' => $promo->discount_type, 'discount_amount' => $promo->discount_amount, 'max_discount' => $promo->max_discount]
+        ]);
+    }
 }
