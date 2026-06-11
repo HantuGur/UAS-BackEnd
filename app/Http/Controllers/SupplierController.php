@@ -1,64 +1,26 @@
 <?php
-
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
+use App\Models\Supplier;
+use App\Http\Requests\StoreSupplierRequest;
 
 class SupplierController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index() {
+        $suppliers = Supplier::latest()->get();
+        return view('suppliers.index', compact('suppliers'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create() { return view('suppliers.create'); }
+    public function store(StoreSupplierRequest $request) {
+        Supplier::create($request->validated());
+        return redirect()->route('suppliers.index')->with('success', 'Supplier baru berhasil didaftarkan.');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function edit(Supplier $supplier) { return view('suppliers.edit', compact('supplier')); }
+    public function update(StoreSupplierRequest $request, Supplier $supplier) {
+        $supplier->update($request->validated());
+        return redirect()->route('suppliers.index')->with('success', 'Data supplier berhasil diperbarui.');
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy(Supplier $supplier) {
+        $supplier->delete();
+        return redirect()->route('suppliers.index')->with('success', 'Supplier berhasil dihapus.');
     }
 }

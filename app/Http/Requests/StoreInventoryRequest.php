@@ -12,4 +12,12 @@ class StoreInventoryRequest extends FormRequest
             'unit' => 'required|string|max:50'
         ];
     }
+    public function messages(): array {
+        return [
+            'supplier_id.required' => 'Supplier wajib dipilih.',
+            'item_name.required'   => 'Nama bahan baku wajib diisi.',
+            'quantity.min'         => 'Stok tidak boleh negatif.',
+        ];
+    }
 }
+
