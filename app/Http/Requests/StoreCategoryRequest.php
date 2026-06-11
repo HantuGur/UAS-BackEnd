@@ -11,4 +11,10 @@ class StoreCategoryRequest extends FormRequest
             'description' => 'nullable|string',
         ];
     }
+    public function messages(): array {
+        return [
+            'name.required' => 'Nama kategori wajib diisi.',
+            'name.unique'   => 'Nama kategori sudah ada, gunakan nama lain.',
+        ];
+    }
 }
