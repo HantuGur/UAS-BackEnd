@@ -14,4 +14,11 @@ class StoreEmployeeRequest extends FormRequest
             'role'      => 'required|in:admin,kasir,manager',
         ];
     }
+    public function messages(): array {
+        return [
+            'username.unique'   => 'Username sudah digunakan oleh karyawan lain.',
+            'password.min'      => 'Password minimal 6 karakter.',
+            'branch_id.exists'  => 'Cabang yang dipilih tidak ditemukan.',
+        ];
+    }
 }
