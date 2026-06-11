@@ -7,7 +7,9 @@ class TableController extends Controller
 {
     public function index() {
         $tables = Table::orderBy('table_number')->get();
-        return view('tables.index', compact('tables'));
+        $available = $tables->where('status', 'available')->count();
+        $occupied  = $tables->where('status', 'occupied')->count();
+        return view('tables.index', compact('tables', 'available', 'occupied'));
     }
     public function create() { return view('tables.create'); }
     public function store(StoreTableRequest $request) {
