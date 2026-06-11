@@ -14,4 +14,11 @@ class StorePaymentRequest extends FormRequest
             'promo_id'       => 'nullable|exists:promos,id',
         ];
     }
+    public function messages(): array {
+        return [
+            'order_id.required'       => 'ID pesanan wajib ada.',
+            'payment_method.required' => 'Metode pembayaran wajib dipilih.',
+            'amount.required'         => 'Jumlah pembayaran wajib diisi.',
+        ];
+    }
 }
