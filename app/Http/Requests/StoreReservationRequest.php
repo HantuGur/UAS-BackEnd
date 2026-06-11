@@ -13,4 +13,10 @@ class StoreReservationRequest extends FormRequest
             'guests_count'     => 'required|integer|min:1',
         ];
     }
+    public function messages(): array {
+        return [
+            'reservation_time.after' => 'Waktu reservasi harus lebih dari waktu sekarang.',
+            'guests_count.min'       => 'Jumlah tamu minimal 1 orang.',
+        ];
+    }
 }
