@@ -20,3 +20,13 @@ Route::get('orders/status/{status}', [OrderController::class, 'getByStatus'])->n
 
 // Route Resource Web untuk Pesanan (Orders)
 Route::resource('orders', OrderController::class);
+
+// RUTE PUBLIK
+Route::get('/', [CustomerShopController::class, 'index'])->name('customer.shop');
+
+// Rute Autentikasi
+Route::get('/login', [AuthController::class, 'showCustomerLogin'])->name('customer.login');
+Route::post('/login', [AuthController::class, 'customerLogin']);
+Route::get('/admin/login', [AuthController::class, 'showAdminLogin'])->name('admin.login');
+Route::post('/admin/login', [AuthController::class, 'adminLogin']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
