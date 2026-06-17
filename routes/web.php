@@ -1,6 +1,13 @@
 <?php
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CustomerShopController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReservationController;
@@ -10,33 +17,17 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\EmployeeController;
 
-// Redirect dari halaman utama root (/) langsung menuju ke halaman pesanan (orders)
-Route::get('/', function () {
-    return redirect()->route('orders.index');
-});
-
-// Route Resource Web untuk Pelanggan (Customers)
-Route::resource('customers', CustomerController::class);
-
-// Route Resource Web untuk Menu Makanan/Minuman
-Route::resource('menus', MenuController::class);
-
-// Route Web khusus untuk menyaring pesanan berdasarkan status (pending/completed)
-Route::get('orders/status/{status}', [OrderController::class, 'getByStatus'])->name('orders.status');
-
-// Route Resource Web untuk Pesanan (Orders)
-Route::resource('orders', OrderController::class);
-
 // RUTE PUBLIK
 Route::get('/', [CustomerShopController::class, 'index'])->name('customer.shop');
 
-// Rute Autentikasi
+// Autentikasi
 Route::get('/login', [AuthController::class, 'showCustomerLogin'])->name('customer.login');
 Route::post('/login', [AuthController::class, 'customerLogin']);
 Route::get('/admin/login', [AuthController::class, 'showAdminLogin'])->name('admin.login');
 Route::post('/admin/login', [AuthController::class, 'adminLogin']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-// Middleware Customer — rute yang membutuhkan login pelanggan
+
+// Customer (login diperlukan)
 Route::middleware('customer.auth')->group(function () {
     Route::post('/cart/add', [CustomerShopController::class, 'addToCart'])->name('customer.cart.add');
     Route::get('/cart', [CustomerShopController::class, 'cart'])->name('customer.cart');
@@ -52,10 +43,10 @@ Route::middleware('customer.auth')->group(function () {
     Route::get('/feedback', [CustomerShopController::class, 'addFeedback'])->name('customer.feedback');
     Route::post('/feedback', [CustomerShopController::class, 'storeFeedback'])->name('customer.feedback.store');
 });
-// Middleware Admin (Panel Manajerial)
+
+// Admin Panel (login karyawan diperlukan)
 Route::middleware('admin.auth')->prefix('admin')->group(function () {
     Route::get('/', fn() => redirect()->route('orders.index'));
-
     Route::resource('orders', OrderController::class);
     Route::get('orders/status/{status}', [OrderController::class, 'getByStatus'])->name('orders.status');
     Route::resource('categories', CategoryController::class);
