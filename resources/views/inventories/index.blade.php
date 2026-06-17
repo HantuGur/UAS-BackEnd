@@ -1,4 +1,3 @@
-```html
 @extends('layouts.admin')
 @section('title', 'Manajemen Inventori')
 @section('content')
