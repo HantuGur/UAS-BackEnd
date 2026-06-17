@@ -21,9 +21,13 @@
         <div class="form-group">
             <label for="category">Kategori</label>
             <select id="category" name="category" class="form-control">
-                <option value="makanan" {{ old('category') === 'makanan' ? 'selected' : '' }}>Makanan</option>
-                <option value="minuman" {{ old('category') === 'minuman' ? 'selected' : '' }}>Minuman</option>
-                <option value="lainnya" {{ old('category') === 'lainnya' ? 'selected' : '' }}>Lainnya</option>
+                @forelse($categories as $cat)
+                    <option value="{{ $cat->name }}" {{ old('category') === $cat->name ? 'selected' : '' }}>{{ ucfirst($cat->name) }}</option>
+                @empty
+                    <option value="makanan" {{ old('category') === 'makanan' ? 'selected' : '' }}>Makanan</option>
+                    <option value="minuman" {{ old('category') === 'minuman' ? 'selected' : '' }}>Minuman</option>
+                    <option value="dessert" {{ old('category') === 'dessert' ? 'selected' : '' }}>Dessert</option>
+                @endforelse
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Simpan Menu</button>
