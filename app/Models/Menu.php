@@ -1,15 +1,35 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Menu extends Model {
+class Menu extends Model
+{
     use HasFactory;
-    protected $fillable = ['name', 'price', 'category'];
 
-    // Menghubungkan Menu ke tabel Order Items
-    public function orderItems(): HasMany {
+    // Kolom yang dapat diisi secara massal (mass assignment)
+    protected $fillable = [
+        'name',
+        'price',
+        'category',
+    ];
+
+    /**
+     * Mendapatkan semua item pesanan (order items) yang terasosiasi dengan menu ini.
+     */
+    public function orderItems(): HasMany
+    {
         return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * Mendapatkan kategori terasosiasi dengan menu ini.
+     */
+    public function categoryRelation()
+    {
+        return $this->belongsTo(Category::class, 'category', 'name');
     }
 }

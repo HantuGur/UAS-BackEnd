@@ -10,6 +10,7 @@ class StoreSupplierRequest extends FormRequest
             'name'    => 'required|string|max:255',
             'phone'   => 'nullable|string|max:20',
             'address' => 'nullable|string',
+            'contact_name' => 'nullable|string',
         ];
     }
 }
