@@ -19,7 +19,7 @@
             @if(session()->has('customer_id'))
                 <button class="btn btn-navy" onclick="openModal({{ $menu->id }}, '{{ $menu->name }}', {{ $menu->price }})">+ Tambah</button>
             @else
-                <a href="{{ route('customer.login') }}" class="btn btn-secondary">Login</a>
+                <a href="{{ route('customer.login') }}" class="btn btn-navy">+ Tambah</a>
             @endif
         </div>
     </div>
