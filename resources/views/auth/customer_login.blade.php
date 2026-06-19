@@ -1,40 +1,37 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Login Pelanggan - Resto 3D</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { background: #1e3a8a; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: 'Plus Jakarta Sans', sans-serif; }
-        .login-box { background: white; padding: 40px; border-radius: 12px; width: 380px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
-        .logo { font-size: 28px; font-weight: 800; color: #1e3a8a; text-align: center; margin-bottom: 8px; }
-        .logo span { background: #1e3a8a; color: white; padding: 4px 8px; border-radius: 4px; }
-        h2 { text-align: center; font-size: 16px; color: #64748b; margin-bottom: 28px; font-weight: 400; }
-        .form-group { margin-bottom: 16px; }
-        label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #374151; }
-        input { width: 100%; padding: 12px 14px; border: 1.5px solid #d1d5db; border-radius: 6px; font-size: 14px; outline: none; transition: border-color 0.2s; }
-        input:focus { border-color: #1e3a8a; }
-        .btn-submit { width: 100%; padding: 14px; background: #1e3a8a; color: white; border: none; border-radius: 6px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 8px; }
-        .alert-danger { background: #fef2f2; color: #b91c1c; padding: 12px; border-radius: 6px; font-size: 13px; margin-bottom: 16px; border-left: 3px solid #dc2626; }
-    </style>
-</head>
-<body>
-    <div class="login-box">
-        <div class="logo">Resto<span>3D</span></div>
-        <h2>Masuk atau daftar sebagai pelanggan</h2>
-        @if($errors->any()) <div class="alert-danger">{{ $errors->first() }}</div> @endif
-        <form method="POST" action="{{ route('customer.login') }}">
-            @csrf
-            <div class="form-group">
-                <label>Nama Anda</label>
-                <input type="text" name="name" value="{{ old('name') }}" placeholder="Masukkan nama lengkap" required>
-            </div>
-            <div class="form-group">
-                <label>Alamat Email</label>
-                <input type="email" name="email" value="{{ old('email') }}" placeholder="contoh@email.com" required>
-            </div>
-            <button type="submit" class="btn-submit">Masuk / Daftar Sekarang</button>
-        </form>
+@extends('layouts.customer')
+@section('title', 'Masuk / Daftar Pelanggan - Resto 3D')
+@section('content')
+
+<div class="card" style="max-width: 420px; margin: 60px auto; border: 1px solid var(--border-color); padding: 32px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+    <div style="text-align: center; margin-bottom: 28px;">
+        <h2 style="font-size: 22px; font-weight: 800; color: var(--navy-primary);">Masuk Pelanggan</h2>
+        <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Gunakan nama dan email Anda untuk memesan makanan/minuman.</p>
     </div>
-</body>
-</html>
+
+    <form action="{{ route('customer.login') }}" method="POST">
+        @csrf
+        <div class="form-group">
+            <label for="name" style="font-weight: 600;">Nama Lengkap</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="Masukkan nama Anda..." required value="{{ old('name') }}">
+            @error('name') <p class="error-message">{{ $message }}</p> @enderror
+        </div>
+
+        <div class="form-group" style="margin-top: 20px;">
+            <label for="email" style="font-weight: 600;">Alamat Email</label>
+            <input type="email" name="email" id="email" class="form-control" placeholder="Contoh: pelanggan@email.com" required value="{{ old('email') }}">
+            @error('email') <p class="error-message">{{ $message }}</p> @enderror
+        </div>
+
+        <button type="submit" class="btn btn-navy" style="width: 100%; padding: 12px; font-size: 15px; border-radius: 4px; margin-top: 24px;">
+            Masuk / Daftar Sekarang
+        </button>
+    </form>
+    
+    <div style="text-align: center; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px; display: flex; flex-direction: column; gap: 12px;">
+        <span style="font-size: 12px; color: var(--text-muted);">Belum punya akun? Akun baru otomatis dibuat menggunakan email Anda saat masuk.</span>
+        <a href="{{ route('customer.shop') }}" style="color: var(--text-color); font-size: 13px; text-decoration: none; font-weight: 600; margin-top: 8px; border: 1px solid var(--border-color); padding: 8px; border-radius: 4px; display: inline-block;">← Kembali ke Beranda</a>
+        <a href="{{ route('admin.login') }}" style="color: var(--navy-primary); font-size: 13px; text-decoration: none; font-weight: 600; margin-top: 8px;">🔑 Masuk Sebagai Staf / Admin</a>
+    </div>
+</div>
+
+@endsection
