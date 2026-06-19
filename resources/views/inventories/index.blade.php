@@ -11,8 +11,8 @@
         <tbody>
             @foreach($inventories as $i => $inv)
             <tr>
-                <td>{{ $i+1 }}</td><td>{{ $inv->item_name }}</td><td>{{ $inv->supplier->name }}</td>
-                <td><span class="badge {{ $inv->quantity < 10 ? 'badge-danger' : 'badge-success' }}">{{ $inv->quantity }}</span></td>
+                <td>{{ $i+1 }}</td><td>{{ $inv->item_name }}</td><td>{{ $inv->supplier->name ?? 'Tanpa Supplier' }}</td>
+                <td><span class="badge {{ $inv->stock_quantity < 10 ? 'badge-danger' : 'badge-success' }}">{{ $inv->stock_quantity }}</span></td>
                 <td>{{ $inv->unit }}</td>
                 <td>
                     <a href="{{ route('inventories.edit', $inv) }}" class="btn btn-secondary">Edit</a>
