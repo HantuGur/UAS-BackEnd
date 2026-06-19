@@ -6,12 +6,14 @@ class StoreEmployeeRequest extends FormRequest
 {
     public function authorize(): bool { return true; }
     public function rules(): array {
+        $employeeId = $this->route('employee') ? $this->route('employee')->id : null;
         return [
             'branch_id' => 'required|exists:branches,id',
             'name'      => 'required|string|max:255',
-            'username'  => 'required|string|max:100|unique:employees,username',
-            'password'  => 'required|string|min:6',
-            'role'      => 'required|in:admin,kasir,manager',
+            'username'  => 'nullable|string|max:100|unique:employees,username,' . $employeeId,
+            'password'  => 'nullable|string|min:6',
+            'role'      => 'required|string|in:admin,Kasir,Manager,kasir,manager',
+            'phone'     => 'nullable|string',
         ];
     }
     public function messages(): array {

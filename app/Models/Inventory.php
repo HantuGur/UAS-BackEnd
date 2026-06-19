@@ -1,11 +1,21 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Inventory extends Model {
+class Inventory extends Model
+{
     use HasFactory;
+
+    protected $table = 'inventories';
+
     protected $fillable = ['item_name', 'stock_quantity', 'unit', 'supplier_id'];
 
-    public function supplier() { return $this->belongsTo(Supplier::class); }
+    // Setiap bahan baku bersumber dari satu supplier
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
 }
