@@ -9,7 +9,8 @@ class StoreInventoryRequest extends FormRequest
         return [
             'item_name' => 'required|string|max:255',
             'stock_quantity' => 'required|integer|min:0',
-            'unit' => 'required|string|max:50'
+            'unit' => 'required|string|max:50',
+            'supplier_id' => 'required|exists:suppliers,id',
         ];
     }
     public function messages(): array {
